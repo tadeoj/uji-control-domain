@@ -1,6 +1,7 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: Oracle
+Bundle-Name: Jdbc
 Bundle-SymbolicName: es.uji.control.domain.jdbc
 Bundle-Version: 1.0.0.qualifier
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Require-Bundle: es.uji.control.domain;bundle-version="1.0.0"
