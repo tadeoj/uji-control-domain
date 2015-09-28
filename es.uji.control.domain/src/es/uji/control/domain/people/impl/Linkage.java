@@ -1,24 +1,18 @@
 package es.uji.control.domain.people.impl;
 
-public class Linkage {
+import es.uji.control.domain.people.ILinkage;
+
+final public class Linkage implements ILinkage {
 	
-	private long id;
 	private String name;
 	
-	public long getId() {
-		return id;
-	}
-
-	public void setId(long id) {
-		this.id = id;
+	public Linkage(String name) {
+		this.name = name;
 	}
 	
+	@Override
 	public String getName() {
 		return name;
-	}
-	
-	public void setName(String name) {
-		this.name = name;
 	}
 	
 }

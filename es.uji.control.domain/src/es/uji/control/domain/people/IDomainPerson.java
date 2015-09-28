@@ -1,6 +1,6 @@
 package es.uji.control.domain.people;
 
-import java.util.List;
+import java.util.Set;
 
 public interface IDomainPerson {
 	
@@ -9,5 +9,7 @@ public interface IDomainPerson {
 	public IPersonStream getPerson(IPersonIdentifier personIdentifier);
 
 	public IPhotoStream getAllPhotos();
+	
+	public Set<ILinkage> getLinkages();
 	
 }
