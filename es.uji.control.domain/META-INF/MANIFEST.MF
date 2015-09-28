@@ -4,6 +4,7 @@ Bundle-Name: Domain
 Bundle-SymbolicName: es.uji.control.domain
 Bundle-Version: 1.0.0.qualifier
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
-Export-Package: es.uji.control.domain,
- es.uji.control.domain.accreditations,
- es.uji.control.domain.people
+Export-Package: es.uji.control.domain.authorizations;version="1.0.0",
+ es.uji.control.domain.authorizations.impl;version="1.0.0",
+ es.uji.control.domain.people;version="1.0.0",
+ es.uji.control.domain.people.impl;version="1.0.0"
