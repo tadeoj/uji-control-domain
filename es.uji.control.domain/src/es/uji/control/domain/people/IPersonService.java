@@ -2,7 +2,7 @@ package es.uji.control.domain.people;
 
 import java.util.Set;
 
-public interface IDomainPerson {
+public interface IPersonService {
 	
 	public IPersonStream getAllPersons(); 
 
