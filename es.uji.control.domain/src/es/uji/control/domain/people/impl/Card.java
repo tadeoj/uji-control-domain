@@ -1,6 +1,8 @@
-package es.uji.control.domain.accreditations;
+package es.uji.control.domain.people.impl;
 
 import java.util.Date;
+
+import es.uji.control.domain.people.OriginEnum;
 
 public class Card extends Accreditation {
 

@@ -1,8 +1,6 @@
-package es.uji.control.domain.people;
+package es.uji.control.domain.people.impl;
 
 import java.util.List;
-
-import es.uji.control.domain.accreditations.Accreditation;
 
 public class Person {
 
@@ -12,7 +10,6 @@ public class Person {
 	private String lastName2;
 	private String identification;
 	private List<Linkage> linkages;
-	private Photo photo;
 	private List<Accreditation> accreditations;
 
 	public long getId() {
@@ -61,14 +58,6 @@ public class Person {
 
 	public void setLinkages(List<Linkage> linkages) {
 		this.linkages = linkages;
-	}
-
-	public Photo getPhoto() {
-		return photo;
-	}
-
-	public void setPhoto(Photo photo) {
-		this.photo = photo;
 	}
 
 	public List<Accreditation> getAccreditations() {

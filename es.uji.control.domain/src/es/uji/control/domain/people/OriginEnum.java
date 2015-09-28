@@ -1,4 +1,4 @@
-package es.uji.control.domain.accreditations;
+package es.uji.control.domain.people;
 
 public enum OriginEnum {
 	

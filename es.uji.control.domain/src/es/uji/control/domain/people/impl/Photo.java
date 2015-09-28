@@ -1,4 +1,4 @@
-package es.uji.control.domain.people;
+package es.uji.control.domain.people.impl;
 
 import java.util.Date;
 

@@ -1,4 +1,4 @@
-package es.uji.control.domain.accreditations;
+package es.uji.control.domain.people.impl;
 
 public abstract class Accreditation {
 
