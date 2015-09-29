@@ -1,5 +1,7 @@
 package es.uji.control.domain.people;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class PersonBuilder {
@@ -9,42 +11,62 @@ public class PersonBuilder {
 	private String firstLastName;
 	private String secondLastName;
 	private String identification;
-	private List<ILinkage> linkages;
-	private List<IAccreditation> accreditation;
+	private ArrayList<ILinkage> linkages = new ArrayList<>();
+	private ArrayList<IAccreditation> accreditations = new ArrayList<>();
 
-	public void setId(IPersonIdentifier id) {
+	public PersonBuilder setId(IPersonIdentifier id) {
 		this.id = id;
+		return this;
 	}
 
-	public void setName(String name) {
+	public PersonBuilder setName(String name) {
 		this.name = name;
+		return this;
 	}
 
-	public void setFirstLastName(String firstLastName) {
+	public PersonBuilder setFirstLastName(String firstLastName) {
 		this.firstLastName = firstLastName;
+		return this;
 	}
 
-	public void setSecondLastName(String secondLastName) {
+	public PersonBuilder setSecondLastName(String secondLastName) {
 		this.secondLastName = secondLastName;
+		return this;
 	}
 
-	public void setIdentification(String identification) {
+	public PersonBuilder setIdentification(String identification) {
 		this.identification = identification;
+		return this;
 	}
 
-	public void addLinkages(List<ILinkage> linkages) {
-		this.linkages = linkages;
+	public PersonBuilder addLinkage(ILinkage linkage) {
+		linkages.add(linkage);
+		return this;
 	}
 
-	public void addAccreditation(List<IAccreditation> accreditation) {
-		this.accreditation = accreditation;
+	public PersonBuilder addAccreditation(IAccreditation accreditation) {
+		accreditations.add(accreditation);
+		return this;
 	}
 
 	public Person build() {
-		return new Person(id, name, firstLastName, secondLastName, identification, linkages, accreditation);
+		if (id == null) throw new IllegalStateException("id isn't defined");
+		if (name == null) throw new IllegalStateException("name isn't defined");
+		if (firstLastName == null) throw new IllegalStateException("firstLastName isn't defined");
+		if (secondLastName == null) throw new IllegalStateException("secondLastName isn't defined");
+		if (identification == null) throw new IllegalStateException("identification isn't defined");
+		return new Person(
+			id, 
+			name, 
+			firstLastName, 
+			secondLastName, 
+			identification, 
+			Collections.unmodifiableList(linkages), 
+			Collections.unmodifiableList(accreditations) 
+		);
 	}
 
-	private class Person implements IPerson {
+	static private class Person implements IPerson {
 
 		private final IPersonIdentifier id;
 		private final String name;
@@ -102,8 +124,6 @@ public class PersonBuilder {
 			return accreditation;
 		}
 		
-		
-
 	}
 
 }
