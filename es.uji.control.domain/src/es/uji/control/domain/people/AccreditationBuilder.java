@@ -37,10 +37,10 @@ public class AccreditationBuilder {
 	
 	public Accreditation build() {
 		if (type == null) throw new IllegalStateException("type isn't defined");
-		if (extraType == null) throw new IllegalStateException("extraType isn't defined");
 		if (raw == null) throw new IllegalStateException("raw isn't defined");
 		if (emisionDate == null) throw new IllegalStateException("emisionDate isn't defined");
 		if (cancelationDate == null) throw new IllegalStateException("cancelationDate isn't defined");
+		
 		return new Accreditation(type, extraType, raw, emisionDate, cancelationDate);
 	}
 	
