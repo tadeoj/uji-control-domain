@@ -1,9 +1,10 @@
 package es.uji.control.domain.jdbc.internal;
 
+import java.sql.Connection;
 import java.util.ArrayList;
 
 import es.uji.control.domain.IPeopleDomainConnection;
-import es.uji.control.domain.PeopleDomainConnectionFactoryException;
+import es.uji.control.domain.PeopleDomainConnectionException;
 import es.uji.control.domain.PeopleNotImplementedException;
 import es.uji.control.domain.authorizations.IAuthorizationsService;
 import es.uji.control.domain.jdbc.IJdbcPeopleDomainConnectionGetter;
@@ -25,7 +26,7 @@ public class JdbcConnectionFactory implements IPeopleDomainConnectionFactorySPI 
 	}
 
 	@Override
-	public IPeopleDomainConnection createConnection() throws PeopleDomainConnectionFactoryException {
+	public IPeopleDomainConnection createConnection() throws PeopleDomainConnectionException {
 		synchronized (this) {
 			PeopleDomainConnection newConnection = new PeopleDomainConnection();
 			connections.add(newConnection);
@@ -56,12 +57,13 @@ public class JdbcConnectionFactory implements IPeopleDomainConnectionFactorySPI 
 		PersonImpl personImpl;
 		AuthorizationsImpl authorizationsImpl;
 		
-		public PeopleDomainConnection() throws PeopleDomainConnectionFactoryException {
+		public PeopleDomainConnection() throws PeopleDomainConnectionException {
 			
 			// TODO: Se establece la conexiom..
+			Connection connection = null;
 			
 			// TODO: Se crean las implementaciones de los subservicios
-			personImpl = new PersonImpl(); // TODO: Hay que proporcionar al constructor los recursos de la conexion...
+			personImpl = new PersonImpl(connection); // TODO: Hay que proporcionar al constructor los recursos de la conexion...
 			authorizationsImpl = new AuthorizationsImpl();  // TODO: Hay que proporcionar al constructor los recursos de la conexion...
 			
 		}

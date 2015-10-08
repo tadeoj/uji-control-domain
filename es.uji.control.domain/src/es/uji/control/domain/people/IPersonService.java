@@ -2,14 +2,16 @@ package es.uji.control.domain.people;
 
 import java.util.Set;
 
+import es.uji.control.domain.PeopleDomainConnectionException;
+
 public interface IPersonService {
 	
-	public IPersonStream getAllPersons(); 
+	public IPersonStream getAllPersons() throws PeopleDomainConnectionException; 
 
-	public IPersonStream getPerson(IPersonIdentifier personIdentifier);
+	public IPersonStream getPerson(IPersonIdentifier personIdentifier) throws PeopleDomainConnectionException;
 
-	public IPhotoStream getAllPhotos();
+	public IPhotoStream getAllPhotos() throws PeopleDomainConnectionException;
 	
-	public Set<ILinkage> getLinkages();
+	public Set<ILinkage> getLinkages() throws PeopleDomainConnectionException;
 	
 }
