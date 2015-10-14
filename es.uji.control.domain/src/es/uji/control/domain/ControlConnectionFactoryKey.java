@@ -1,10 +1,10 @@
 package es.uji.control.domain;
 
-final public class PeopleDomainFactoryKey {
+final public class ControlConnectionFactoryKey {
 	
 	private String innerKey;
 	
-	public PeopleDomainFactoryKey(String innerKey) {
+	public ControlConnectionFactoryKey(String innerKey) {
 		// Normalicemos
 		this.innerKey = innerKey.toUpperCase().trim();
 	}
@@ -30,7 +30,7 @@ final public class PeopleDomainFactoryKey {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		PeopleDomainFactoryKey other = (PeopleDomainFactoryKey) obj;
+		ControlConnectionFactoryKey other = (ControlConnectionFactoryKey) obj;
 		if (innerKey == null) {
 			if (other.innerKey != null)
 				return false;
