@@ -8,3 +8,7 @@ Export-Package: es.uji.control.domain;version="1.0.0",
  es.uji.control.domain.authorizations;version="1.0.0",
  es.uji.control.domain.people;version="1.0.0",
  es.uji.control.domain.spi;version="1.0.0"
+Import-Package: org.osgi.framework;version="1.8.0",
+ org.osgi.service.component;version="1.2.2",
+ org.osgi.service.component.annotations;version="1.2.0"
+Service-Component: OSGI-INF/connectionfactory.xml

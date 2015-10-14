@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" activate="activate" deactivate="deactivate" immediate="true" name="connectionfactory">
+   <service>
+      <provide interface="es.uji.control.domain.IControlConnectionFactorySelector"/>
+   </service>
+   <reference bind="bindDao" cardinality="0..1" interface="es.uji.control.domain.spi.IConnectionFactorySPI" name="Dao" policy="dynamic" unbind="unbindDao"/>
+   <implementation class="es.uji.control.domain.internal.ControlComponent"/>
+</scr:component>
