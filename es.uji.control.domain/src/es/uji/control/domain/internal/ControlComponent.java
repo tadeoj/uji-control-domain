@@ -1,7 +1,9 @@
 package es.uji.control.domain.internal;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceRegistration;
@@ -26,7 +28,7 @@ public class ControlComponent implements IControlConnectionFactorySelector {
 	
 	private BundleContext bundlecontext;
 	private PreferencesService preferencesService;
-	private Map<ConnectionFactoryKey, IControlConnectionFactorySPI> factories = new HashMap<>();
+	private Map<ConnectionFactoryKey, ConnectionFactoryBucket> factories = new HashMap<>();
 	private ConnectionFactoryRegistration registration;
 	
 	@Activate
@@ -69,6 +71,21 @@ public class ControlComponent implements IControlConnectionFactorySelector {
 	}
 
 	@Override
+	public Set<ConnectionFactoryKey> getFactoryKeys() {
+		synchronized (this) {
+			return Collections.unmodifiableSet(factories.keySet());
+		}
+	}
+	
+	@Override
+	public String getFactoryDescription(ConnectionFactoryKey key) {
+		synchronized (this) {
+			ConnectionFactoryBucket bucket = factories.get(key);
+			return bucket == null ? "Removed Connection Factory" : bucket.getDescription(); 
+		}
+	}
+
+	@Override
 	public ConnectionFactoryKey getCurrentFactoryKey() {
 		synchronized (this) {
 			return new ConnectionFactoryKey(preferencesService.getSystemPreferences().get(CURRENT_FACTORY_KEY, null));
@@ -86,6 +103,7 @@ public class ControlComponent implements IControlConnectionFactorySelector {
 	public void addConnectionFactorySPI(IControlConnectionFactorySPI connectionFactorySPI, Map<String,?> properties) {
 		// Obtenemos la propiedad para indexar el servicio
 		String connectionFactoryKey = (String) properties.get(IControlConnectionFactorySPI.CONNECTION_FACTORY_KEY);
+		String connectionFactoryDesc = (String) properties.get(IControlConnectionFactorySPI.CONNECTION_FACTORY_DESCRIPTION);
 		if (connectionFactoryKey == null) {
 			throw new IllegalStateException(String.format("El servicio '%s' no se ha publicado con la propiedad '%s' informada." , 
 					IControlConnectionFactorySPI.class.getSimpleName(), 
@@ -94,7 +112,7 @@ public class ControlComponent implements IControlConnectionFactorySelector {
 		}
 		// Se registra el nuevo servicio
 		synchronized (this) {
-			factories.put(new ConnectionFactoryKey(connectionFactoryKey), connectionFactorySPI);
+			factories.put(new ConnectionFactoryKey(connectionFactoryKey), new ConnectionFactoryBucket(connectionFactorySPI, connectionFactoryDesc));
 			updateRegistration();
 		}
 	}
@@ -131,7 +149,7 @@ public class ControlComponent implements IControlConnectionFactorySelector {
 		// Se verifica si hay que registrar los registros
 		boolean mustRegister = registration == null && (bundlecontext != null || factories.keySet().contains(getCurrentFactoryKey()));
 		if (mustRegister) {
-			registerConnectionFactory(factories.get(getCurrentFactoryKey()), getCurrentFactoryKey());
+			registerConnectionFactory(factories.get(getCurrentFactoryKey()).getConnectionFactorySPI(), getCurrentFactoryKey());
 		}
 		
 	}
@@ -154,7 +172,28 @@ public class ControlComponent implements IControlConnectionFactorySelector {
 		}
 	}
 	
-	private class ConnectionFactoryRegistration {
+	final private class ConnectionFactoryBucket {
+		
+		private IControlConnectionFactorySPI connectionFactorySPI;
+		private String description;
+		
+		public ConnectionFactoryBucket(IControlConnectionFactorySPI connectionFactorySPI, String description) {
+			super();
+			this.connectionFactorySPI = connectionFactorySPI;
+			this.description = description;
+		}
+
+		public IControlConnectionFactorySPI getConnectionFactorySPI() {
+			return connectionFactorySPI;
+		}
+
+		public String getDescription() {
+			return description;
+		}
+		
+	}
+	
+	final private class ConnectionFactoryRegistration {
 		
 		private ServiceRegistration<IControlConnectionFactory> registration;
 		private IControlConnectionFactory service;
