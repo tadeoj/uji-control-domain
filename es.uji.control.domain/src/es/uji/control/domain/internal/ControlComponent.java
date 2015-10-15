@@ -14,9 +14,10 @@ import org.osgi.service.component.annotations.ReferenceCardinality;
 import org.osgi.service.component.annotations.ReferencePolicy;
 import org.osgi.service.prefs.PreferencesService;
 
+import es.uji.control.domain.ConnectionFactoryKey;
 import es.uji.control.domain.IControlConnectionFactory;
 import es.uji.control.domain.IControlConnectionFactorySelector;
-import es.uji.control.domain.spi.IConnectionFactorySPI;
+import es.uji.control.domain.spi.IControlConnectionFactorySPI;
 
 @Component(name="connectionfactory", immediate=true)
 public class ControlComponent implements IControlConnectionFactorySelector {
@@ -25,88 +26,94 @@ public class ControlComponent implements IControlConnectionFactorySelector {
 	
 	private BundleContext bundlecontext;
 	private PreferencesService preferencesService;
-	private ServiceRegistration<IControlConnectionFactory> registration;
-	private Map<ConnectionFactoryKey, IConnectionFactorySPI> factories = new HashMap<>();
+	private Map<ConnectionFactoryKey, IControlConnectionFactorySPI> factories = new HashMap<>();
+	private ConnectionFactoryRegistration registration;
 	
 	@Activate
 	public void activate(ComponentContext componentContext) throws Exception {
-		// Se anota el contexto del bundle
-		this.bundlecontext = componentContext.getBundleContext();
-		// Se regulariza el registro del servicio
 		synchronized (this) {
+			// Se anota el contexto del bundle
+			this.bundlecontext = componentContext.getBundleContext();
+			// Se regulariza el registro del servicio
 			updateRegistration();
 		}
 	}
 
 	@Deactivate
 	public void deactivate(ComponentContext componentContext) {
-		// Se anota el contexto del bundle
-		this.bundlecontext = null;
-		// Se regulariza el registro del servicio
 		synchronized (this) {
+			// Se anota el contexto del bundle
+			this.bundlecontext = null;
+			// Se regulariza el registro del servicio
 			updateRegistration();
 		}
 	}
 
 	@Reference(policy=ReferencePolicy.STATIC, cardinality=ReferenceCardinality.MANDATORY, name="preferences")
 	public void bindPreferences(PreferencesService preferencesService) {
-		this.preferencesService = preferencesService;
-		// Se regulariza el registro del servicio
 		synchronized (this) {
+			// Se anota el servicio de registro
+			this.preferencesService = preferencesService;
+			// Se regulariza el registro del servicio
 			updateRegistration();
 		}
 	}
 	
 	public void unbindPreferences(PreferencesService preferencesService) {
-		this.preferencesService = null;
-	}
-
-	@Override
-	public String getCurrentFactory() {
 		synchronized (this) {
-			return preferencesService.getSystemPreferences().get(CURRENT_FACTORY_KEY, null);
+			// Se resetea el servicio de registro
+			this.preferencesService = null;
+			// Se regulariza el registro del servicio
+			updateRegistration();
 		}
 	}
 
 	@Override
-	public void setCurrentFactory(String factoryKey) {
+	public ConnectionFactoryKey getCurrentFactoryKey() {
 		synchronized (this) {
-			preferencesService.getSystemPreferences().put(CURRENT_FACTORY_KEY, factoryKey);
+			return new ConnectionFactoryKey(preferencesService.getSystemPreferences().get(CURRENT_FACTORY_KEY, null));
+		}
+	}
+
+	@Override
+	public void setCurrentFactoryKey(ConnectionFactoryKey key) {
+		synchronized (this) {
+			preferencesService.getSystemPreferences().put(CURRENT_FACTORY_KEY, key.toString());
 		}
 	}
 
 	@Reference(policy=ReferencePolicy.DYNAMIC, cardinality=ReferenceCardinality.OPTIONAL, name="connectionFactorySPI")
-	public void addConnectionFactorySPI(IConnectionFactorySPI connectionFactorySPI, Map<String,?> properties) {
+	public void addConnectionFactorySPI(IControlConnectionFactorySPI connectionFactorySPI, Map<String,?> properties) {
 		// Obtenemos la propiedad para indexar el servicio
-		String connectionFactoryKey = (String) properties.get(IConnectionFactorySPI.CONNECTION_FACTORY_KEY);
+		String connectionFactoryKey = (String) properties.get(IControlConnectionFactorySPI.CONNECTION_FACTORY_KEY);
 		if (connectionFactoryKey == null) {
 			throw new IllegalStateException(String.format("El servicio '%s' no se ha publicado con la propiedad '%s' informada." , 
-					IConnectionFactorySPI.class.getSimpleName(), 
-					IConnectionFactorySPI.CONNECTION_FACTORY_KEY)
+					IControlConnectionFactorySPI.class.getSimpleName(), 
+					IControlConnectionFactorySPI.CONNECTION_FACTORY_KEY)
 				);
 		}
 		// Se registra el nuevo servicio
-		synchronized (connectionFactoryKey) {
+		synchronized (this) {
 			factories.put(new ConnectionFactoryKey(connectionFactoryKey), connectionFactorySPI);
 			updateRegistration();
 		}
 	}
 	
-	public void removeConnectionFactorySPI(IConnectionFactorySPI connectionFactorySPI, Map<String,?> properties) {
+	public void removeConnectionFactorySPI(IControlConnectionFactorySPI connectionFactorySPI, Map<String,?> properties) {
 		// Obtenemos la propiedad para indexar el servicio
-		String connectionFactoryKey = (String) properties.get(IConnectionFactorySPI.CONNECTION_FACTORY_KEY);
+		String connectionFactoryKey = (String) properties.get(IControlConnectionFactorySPI.CONNECTION_FACTORY_KEY);
 		if (connectionFactoryKey == null) {
 			throw new IllegalStateException(String.format("El servicio '%s' no se ha des-publicado con la propiedad '%s' informada." , 
-					IConnectionFactorySPI.class.getSimpleName(), 
-					IConnectionFactorySPI.CONNECTION_FACTORY_KEY)
+					IControlConnectionFactorySPI.class.getSimpleName(), 
+					IControlConnectionFactorySPI.CONNECTION_FACTORY_KEY)
 				);
 		}
 		// Se registra el nuevo servicio
-		synchronized (connectionFactoryKey) {
+		synchronized (this) {
 			if (factories.remove(new ConnectionFactoryKey(connectionFactoryKey)) == null) {
 				throw new IllegalStateException(String.format("El servicio '%s' con la propiedad '%s' informada se ha intentado desregistrar pero no consta en el registro." , 
-						IConnectionFactorySPI.class.getSimpleName(), 
-						IConnectionFactorySPI.CONNECTION_FACTORY_KEY)
+						IControlConnectionFactorySPI.class.getSimpleName(), 
+						IControlConnectionFactorySPI.CONNECTION_FACTORY_KEY)
 					);
 			}
 			updateRegistration();
@@ -114,21 +121,67 @@ public class ControlComponent implements IControlConnectionFactorySelector {
 	}
 	
 	private void updateRegistration() {
+
+		// Se verifica si hay que des-registrar los servicios
+		boolean mustDesregister = registration != null && (bundlecontext == null || factories.keySet().contains(registration.getKey()));
+		if (mustDesregister) {
+			desregisterConnectionFactory();
+		}
+		
+		// Se verifica si hay que registrar los registros
+		boolean mustRegister = registration == null && (bundlecontext != null || factories.keySet().contains(getCurrentFactoryKey()));
+		if (mustRegister) {
+			registerConnectionFactory(factories.get(getCurrentFactoryKey()), getCurrentFactoryKey());
+		}
 		
 	}
 	
-	private void registerConnectionFactory(IControlConnectionFactory controlConnectionFactory) {
+	private void registerConnectionFactory(IControlConnectionFactory controlConnectionFactory, ConnectionFactoryKey key) {
 		if (registration != null) {
-			throw new IllegalStateException(String.format("El servicio '%s' ya esta registrado previamente." , IControlConnectionFactory.class.getSimpleName()));
+			throw new IllegalStateException(String.format("'%s' ya esta registrado previamente." , registration));
 		}
-		registration = bundlecontext.registerService(IControlConnectionFactory.class, controlConnectionFactory, null);
+		registration = new ConnectionFactoryRegistration(
+				bundlecontext.registerService(IControlConnectionFactory.class, controlConnectionFactory, null), 
+				controlConnectionFactory, 
+				key
+			); 
 	}
 	
 	private void desregisterConnectionFactory() {
 		if (registration != null) {
-			registration.unregister();
+			registration.getRegistration().unregister();;
 			registration = null;
 		}
 	}
 	
+	private class ConnectionFactoryRegistration {
+		
+		private ServiceRegistration<IControlConnectionFactory> registration;
+		private IControlConnectionFactory service;
+		private ConnectionFactoryKey key;
+		
+		public ConnectionFactoryRegistration(ServiceRegistration<IControlConnectionFactory> registration, IControlConnectionFactory service, ConnectionFactoryKey key) {
+			this.registration = registration;
+			this.service = service;
+			this.key = key;
+		}
+
+		public ServiceRegistration<IControlConnectionFactory> getRegistration() {
+			return registration;
+		}
+
+		public IControlConnectionFactory getService() {
+			return service;
+		}
+
+		public ConnectionFactoryKey getKey() {
+			return key;
+		}
+		
+		@Override
+		public String toString() {
+			return String.format("%s [%s=%s]", getService().getClass().getSimpleName(), IControlConnectionFactorySPI.CONNECTION_FACTORY_KEY, getKey());
+		}
+		
+	}
 }

@@ -1,4 +1,4 @@
-package es.uji.control.domain.internal;
+package es.uji.control.domain;
 
 final public class ConnectionFactoryKey {
 	

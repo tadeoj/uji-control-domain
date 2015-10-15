@@ -1,6 +1,6 @@
 package es.uji.control.domain;
 
 public interface IControlConnectionFactorySelector {
-	public abstract String getCurrentFactory();
-	public abstract void setCurrentFactory(String factoryKey);
+	public abstract ConnectionFactoryKey getCurrentFactoryKey();
+	public abstract void setCurrentFactoryKey(ConnectionFactoryKey key);
 }
