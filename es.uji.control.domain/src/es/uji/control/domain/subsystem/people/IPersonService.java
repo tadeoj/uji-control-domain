@@ -1,8 +1,8 @@
-package es.uji.control.domain.people;
+package es.uji.control.domain.subsystem.people;
 
 import java.util.Set;
 
-import es.uji.control.domain.ControlConnectionException;
+import es.uji.control.domain.service.connectionfactory.ControlConnectionException;
 
 public interface IPersonService {
 	

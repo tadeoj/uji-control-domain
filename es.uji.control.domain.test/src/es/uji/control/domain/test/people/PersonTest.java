@@ -8,13 +8,13 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
-import es.uji.control.domain.people.AccreditationBuilder;
-import es.uji.control.domain.people.AccreditationType;
-import es.uji.control.domain.people.IPerson;
-import es.uji.control.domain.people.LinkageBuilder;
-import es.uji.control.domain.people.PersonBuilder;
-import es.uji.control.domain.people.PersonIdentifierBuilder;
-import es.uji.control.domain.people.PersonIdentifierType;
+import es.uji.control.domain.subsystem.people.AccreditationBuilder;
+import es.uji.control.domain.subsystem.people.AccreditationType;
+import es.uji.control.domain.subsystem.people.IPerson;
+import es.uji.control.domain.subsystem.people.LinkageBuilder;
+import es.uji.control.domain.subsystem.people.PersonBuilder;
+import es.uji.control.domain.subsystem.people.PersonIdentifierBuilder;
+import es.uji.control.domain.subsystem.people.PersonIdentifierType;
 
 @RunWith(JUnit4.class)
 public class PersonTest {

@@ -14,9 +14,9 @@ import org.osgi.service.component.annotations.ReferenceCardinality;
 import org.osgi.service.component.annotations.ReferencePolicy;
 import org.osgi.service.prefs.PreferencesService;
 
-import es.uji.control.domain.ConnectionFactoryKey;
-import es.uji.control.domain.IControlConnectionFactory;
-import es.uji.control.domain.IControlConnectionFactorySelector;
+import es.uji.control.domain.service.connectionfactory.IControlConnectionFactory;
+import es.uji.control.domain.service.factoryselector.ConnectionFactoryKey;
+import es.uji.control.domain.service.factoryselector.IControlConnectionFactorySelector;
 import es.uji.control.domain.spi.IControlConnectionFactorySPI;
 
 @Component(name="connectionfactory", immediate=true)

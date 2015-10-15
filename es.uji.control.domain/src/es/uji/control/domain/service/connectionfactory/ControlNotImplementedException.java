@@ -1,4 +1,4 @@
-package es.uji.control.domain;
+package es.uji.control.domain.service.connectionfactory;
 
 public class ControlNotImplementedException extends Exception {
 

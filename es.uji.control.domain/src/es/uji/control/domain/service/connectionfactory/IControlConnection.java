@@ -1,7 +1,7 @@
-package es.uji.control.domain;
+package es.uji.control.domain.service.connectionfactory;
 
-import es.uji.control.domain.authorizations.IAuthorizationsService;
-import es.uji.control.domain.people.IPersonService;
+import es.uji.control.domain.subsystem.authorizations.IAuthorizationsService;
+import es.uji.control.domain.subsystem.people.IPersonService;
 
 public interface IControlConnection {
 	abstract IPersonService getPersonService() throws ControlNotImplementedException;

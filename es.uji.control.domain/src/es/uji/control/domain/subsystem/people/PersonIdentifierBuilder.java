@@ -1,4 +1,4 @@
-package es.uji.control.domain.people;
+package es.uji.control.domain.subsystem.people;
 
 
 public class PersonIdentifierBuilder {
