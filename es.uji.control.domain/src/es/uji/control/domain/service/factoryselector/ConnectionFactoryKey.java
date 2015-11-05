@@ -11,9 +11,10 @@ final public class ConnectionFactoryKey {
 	
 	private String connectionFactoryKey;
 	
-	public ConnectionFactoryKey(String connectionFactoryKeyKey) {
-		// Normalicemos
-		this.connectionFactoryKey = connectionFactoryKeyKey.toUpperCase().trim();
+	public ConnectionFactoryKey(String connectionFactoryKey) {
+		if (connectionFactoryKey != null) {
+			this.connectionFactoryKey = connectionFactoryKey.toUpperCase().trim();
+		}
 	}
 	
 	@Override

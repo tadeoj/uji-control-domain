@@ -154,7 +154,7 @@ public class ControlComponent implements IControlConnectionFactorySelector {
 		}
 		
 		// Se verifica si hay que registrar los registros
-		boolean mustRegister = registration == null && (bundlecontext != null || factories.keySet().contains(getCurrentFactoryKey()));
+		boolean mustRegister = registration == null && (bundlecontext != null && factories.keySet().contains(getCurrentFactoryKey()));
 		if (mustRegister) {
 			registerConnectionFactory(factories.get(getCurrentFactoryKey()).getConnectionFactorySPI(), getCurrentFactoryKey());
 		}
