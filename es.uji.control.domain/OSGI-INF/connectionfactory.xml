@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" activate="activate" deactivate="deactivate" immediate="true" name="connectionfactory">
-   <service>
-      <provide interface="es.uji.control.domain.service.factoryselector.IControlConnectionFactorySelector"/>
-   </service>
-   <reference bind="addConnectionFactorySPI" cardinality="0..1" interface="es.uji.control.domain.spi.IControlConnectionFactorySPI" name="connectionFactorySPI" policy="dynamic" unbind="removeConnectionFactorySPI"/>
-   <reference bind="bindPreferences" cardinality="1..1" interface="org.osgi.service.prefs.PreferencesService" name="preferences" policy="static" unbind="unbindPreferences"/>
-   <implementation class="es.uji.control.domain.internal.ControlComponent"/>
-</scr:component>
