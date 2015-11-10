@@ -11,3 +11,9 @@ Import-Package: es.uji.control.domain.people,
  org.osgi.service.component.annotations;version="1.2.0",
  org.osgi.service.prefs;version="1.1.1"
 Service-Component: OSGI-INF/connectionfactory.xml
+Export-Package: es.uji.control.domain.provider.service.connectionfactory,
+ es.uji.control.domain.provider.service.factoryselector,
+ es.uji.control.domain.provider.spi,
+ es.uji.control.domain.provider.subsystem.authorizations,
+ es.uji.control.domain.provider.subsystem.people
+Bundle-ActivationPolicy: lazy

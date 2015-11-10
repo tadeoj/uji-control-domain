@@ -6,7 +6,6 @@
     La llicència completa es pot descarregar de 
     https://joinup.ec.europa.eu/community/eupl/og_page/european-union-public-licence-eupl-v11
  -->
-
 <feature
       id="es.uji.control.domain.feature"
       label="Feature"
@@ -26,6 +25,13 @@
 
    <plugin
          id="es.uji.control.domain"
+         download-size="0"
+         install-size="0"
+         version="1.0.0.qualifier"
+         unpack="false"/>
+
+   <plugin
+         id="es.uji.control.domain.provider"
          download-size="0"
          install-size="0"
          version="1.0.0.qualifier"
