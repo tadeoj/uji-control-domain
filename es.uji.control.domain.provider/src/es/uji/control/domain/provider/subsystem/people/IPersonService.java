@@ -14,12 +14,12 @@ import es.uji.control.domain.provider.service.connectionfactory.ControlConnectio
 
 public interface IPersonService {
 	
-	public IPersonStream getAllPersons() throws ControlConnectionException; 
+	public void getAllPersons(IPersonStream personStream) throws ControlConnectionException; 
 
-	public IPersonStream getPerson(IAccreditation accreditation) throws ControlConnectionException;
+	public void getPerson(IAccreditation accreditation, IPersonStream personStream) throws ControlConnectionException;
 	
-	public IPhotoStream getAllPhotos() throws ControlConnectionException;
+	public void getAllPhotos(IPhotoStream photoStream) throws ControlConnectionException;
 	
-	public IPhotoStream getPhoto(IPersonIdentifier personIdentifier) throws ControlConnectionException;
+	public void getPhoto(IPersonIdentifier personIdentifier, IPhotoStream photoStream) throws ControlConnectionException;
 	
 }
