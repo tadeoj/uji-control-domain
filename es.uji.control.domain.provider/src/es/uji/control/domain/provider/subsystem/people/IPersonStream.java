@@ -12,7 +12,7 @@ import java.util.List;
 import es.uji.control.domain.people.IPerson;
 
 public interface IPersonStream {
-	 void onNext(List<IPerson> l);
+	 void onNext(List<IPerson> persons);
 	 void onError(Throwable t);
 	 void onCompleted();
 }
