@@ -17,7 +17,7 @@ public interface IPerson extends Serializable {
 	public String getSecondLastName();
 	public String getIdentification();
 	public List<ILinkage>getLinkages();
-	public List<IAccreditation> getAccreditations();
+	public List<IAccreditationInfo> getAccreditationsInfo();
 	public abstract int hashCode();
 	public abstract boolean equals(Object obj);
 }

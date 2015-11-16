@@ -19,7 +19,7 @@ public class PersonBuilder {
 	private String secondLastName;
 	private String identification;
 	private ArrayList<ILinkage> linkages = new ArrayList<>();
-	private ArrayList<IAccreditation> accreditations = new ArrayList<>();
+	private ArrayList<IAccreditationInfo> accreditationsInfo = new ArrayList<>();
 
 	public PersonBuilder setId(IPersonIdentifier id) {
 		this.id = id;
@@ -51,8 +51,8 @@ public class PersonBuilder {
 		return this;
 	}
 
-	public PersonBuilder addAccreditation(IAccreditation accreditation) {
-		accreditations.add(accreditation);
+	public PersonBuilder addAccreditation(IAccreditationInfo accreditationInfo) {
+		accreditationsInfo.add(accreditationInfo);
 		return this;
 	}
 
@@ -69,7 +69,7 @@ public class PersonBuilder {
 			secondLastName, 
 			identification, 
 			Collections.unmodifiableList(linkages), 
-			Collections.unmodifiableList(accreditations) 
+			Collections.unmodifiableList(accreditationsInfo) 
 		);
 	}
 
@@ -83,11 +83,11 @@ public class PersonBuilder {
 		private final String secondLastName;
 		private final String identification;
 		private final List<ILinkage> linkages;
-		private final List<IAccreditation> accreditations;
+		private final List<IAccreditationInfo> accreditationsInfo;
 
 		private Person(IPersonIdentifier id, String name, String firstLastName,
 				String secondLastName, String identification,
-				List<ILinkage> linkages, List<IAccreditation> accreditations) {
+				List<ILinkage> linkages, List<IAccreditationInfo> accreditationsInfo) {
 			super();
 			this.id = id;
 			this.name = name;
@@ -95,7 +95,7 @@ public class PersonBuilder {
 			this.secondLastName = secondLastName;
 			this.identification = identification;
 			this.linkages = linkages;
-			this.accreditations = accreditations;
+			this.accreditationsInfo = accreditationsInfo;
 		}
 
 		@Override
@@ -129,29 +129,21 @@ public class PersonBuilder {
 		}
 
 		@Override
-		public List<IAccreditation> getAccreditations() {
-			return accreditations;
+		public List<IAccreditationInfo> getAccreditationsInfo() {
+			return accreditationsInfo;
 		}
 
 		@Override
 		public int hashCode() {
 			final int prime = 31;
 			int result = 1;
-			result = prime
-					* result
-					+ ((accreditations == null) ? 0 : accreditations.hashCode());
-			result = prime * result
-					+ ((firstLastName == null) ? 0 : firstLastName.hashCode());
+			result = prime * result + ((accreditationsInfo == null) ? 0 : accreditationsInfo.hashCode());
+			result = prime * result + ((firstLastName == null) ? 0 : firstLastName.hashCode());
 			result = prime * result + ((id == null) ? 0 : id.hashCode());
-			result = prime
-					* result
-					+ ((identification == null) ? 0 : identification.hashCode());
-			result = prime * result
-					+ ((linkages == null) ? 0 : linkages.hashCode());
+			result = prime * result + ((identification == null) ? 0 : identification.hashCode());
+			result = prime * result + ((linkages == null) ? 0 : linkages.hashCode());
 			result = prime * result + ((name == null) ? 0 : name.hashCode());
-			result = prime
-					* result
-					+ ((secondLastName == null) ? 0 : secondLastName.hashCode());
+			result = prime * result + ((secondLastName == null) ? 0 : secondLastName.hashCode());
 			return result;
 		}
 
@@ -164,10 +156,10 @@ public class PersonBuilder {
 			if (getClass() != obj.getClass())
 				return false;
 			Person other = (Person) obj;
-			if (accreditations == null) {
-				if (other.accreditations != null)
+			if (accreditationsInfo == null) {
+				if (other.accreditationsInfo != null)
 					return false;
-			} else if (!accreditations.equals(other.accreditations))
+			} else if (!accreditationsInfo.equals(other.accreditationsInfo))
 				return false;
 			if (firstLastName == null) {
 				if (other.firstLastName != null)
@@ -201,7 +193,7 @@ public class PersonBuilder {
 				return false;
 			return true;
 		}
-		
+
 	}
 
 }

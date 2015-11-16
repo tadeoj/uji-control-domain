@@ -9,6 +9,7 @@ package es.uji.control.domain.test.people;
 
 import static org.junit.Assert.assertEquals;
 
+import java.nio.ByteBuffer;
 import java.util.Date;
 
 import org.junit.Test;
@@ -16,6 +17,7 @@ import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
 import es.uji.control.domain.people.AccreditationBuilder;
+import es.uji.control.domain.people.AccreditationInfoBuilder;
 import es.uji.control.domain.people.AccreditationType;
 import es.uji.control.domain.people.IPerson;
 import es.uji.control.domain.people.LinkageBuilder;
@@ -48,11 +50,9 @@ public class PersonTest {
 		assertEquals("Linkage", "Alumno", person.getLinkages().get(0).getName());
 		
 		// Accreditation
-		assertEquals("Accreditation Type", AccreditationType.MIFARE_SERIAL_NUMBER, person.getAccreditations().get(0).getType());
-		assertEquals("Accreditation Raw", "20202020", person.getAccreditations().get(0).getRaw());
-		assertEquals("Extra type", null, person.getAccreditations().get(0).getExtraType());
-		assertEquals("Emision Date", emisionDate, person.getAccreditations().get(0).getEmisionDate());
-		assertEquals("Cancelation Date", cancelationDate, person.getAccreditations().get(0).getCancelationDate());
+		assertEquals("Accreditation Type", AccreditationType.MIFARE_SERIAL_NUMBER, person.getAccreditationsInfo().get(0).getAccreditation().getType());
+		byte[] raw = ByteBuffer.allocate(4).putInt(20202020).array();
+		assertEquals("Accreditation Raw", raw, person.getAccreditationsInfo().get(0).getAccreditation().getRaw());
 
 	}
 	
@@ -67,9 +67,14 @@ public class PersonTest {
 		
 		AccreditationBuilder accreditationBuilder = new AccreditationBuilder();
 		accreditationBuilder.setType(AccreditationType.MIFARE_SERIAL_NUMBER);
-		accreditationBuilder.setRaw("20202020");
-		accreditationBuilder.setEmisionDate(emisionDate);
-		accreditationBuilder.setCancelationDate(cancelationDate);
+		byte[] raw = ByteBuffer.allocate(4).putInt(20202020).array();
+		accreditationBuilder.setRaw(raw);
+		
+		AccreditationInfoBuilder accreditationInfoBuilder = new AccreditationInfoBuilder();
+		accreditationInfoBuilder.setAccreditation(accreditationBuilder.build());		
+		accreditationInfoBuilder.setEmisionDate(emisionDate);
+		accreditationInfoBuilder.setCancelationDate(cancelationDate);
+		accreditationInfoBuilder.setAccreditation(accreditationBuilder.build());
 		
 		LinkageBuilder linkageBuilder = new LinkageBuilder();
 		linkageBuilder.setName("Alumno");
@@ -80,7 +85,7 @@ public class PersonTest {
 		builder.setFirstLastName("Julián");
 		builder.setSecondLastName("Segarra");
 		builder.setIdentification("11111111L");
-		builder.addAccreditation(accreditationBuilder.build());
+		builder.addAccreditation(accreditationInfoBuilder.build());
 		builder.addLinkage(linkageBuilder.build());
 		return builder.build();
 	}
