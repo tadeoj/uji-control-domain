@@ -7,7 +7,6 @@
  *******************************************************************************/
 package es.uji.control.domain.people;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -18,8 +17,8 @@ public class PersonBuilder {
 	private String firstLastName;
 	private String secondLastName;
 	private String identification;
-	private ArrayList<ILinkage> linkages = new ArrayList<>();
-	private ArrayList<IAccreditationInfo> accreditationsInfo = new ArrayList<>();
+	private List<ILinkage> linkages;
+	private List<IAccreditationInfo> accreditationsInfo;
 
 	public PersonBuilder setId(IPersonIdentifier id) {
 		this.id = id;
@@ -46,13 +45,13 @@ public class PersonBuilder {
 		return this;
 	}
 
-	public PersonBuilder addLinkage(ILinkage linkage) {
-		linkages.add(linkage);
+	public PersonBuilder setLinkages(List<ILinkage> linkages) {
+		this.linkages = linkages;
 		return this;
 	}
 
-	public PersonBuilder addAccreditation(IAccreditationInfo accreditationInfo) {
-		accreditationsInfo.add(accreditationInfo);
+	public PersonBuilder setAccreditationsInfo(List<IAccreditationInfo> accreditationsInfo) {
+		this.accreditationsInfo = accreditationsInfo;
 		return this;
 	}
 
@@ -62,6 +61,8 @@ public class PersonBuilder {
 		if (firstLastName == null) throw new IllegalStateException("firstLastName isn't defined");
 		if (secondLastName == null) throw new IllegalStateException("secondLastName isn't defined");
 		if (identification == null) throw new IllegalStateException("identification isn't defined");
+		if (linkages == null) throw new IllegalStateException("linkages isn't defined");
+		if (accreditationsInfo == null) throw new IllegalStateException("accreditationsInfo isn't defined");
 		return new Person(
 			id, 
 			name, 

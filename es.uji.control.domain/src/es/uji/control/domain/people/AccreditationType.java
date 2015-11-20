@@ -7,6 +7,10 @@
  *******************************************************************************/
 package es.uji.control.domain.people;
 
+import java.nio.ByteBuffer;
+
 public enum AccreditationType {
-	MIFARE_SERIAL_NUMBER
+	
+	MIFARE_SERIAL_NUMBER;
+	
 }

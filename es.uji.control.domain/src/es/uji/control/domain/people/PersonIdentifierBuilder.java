@@ -11,14 +11,14 @@ package es.uji.control.domain.people;
 public class PersonIdentifierBuilder {
 
 	private PersonIdentifierType type;
-	private String raw;
+	private byte[] raw;
 
 	public PersonIdentifierBuilder setType(PersonIdentifierType type) {
 		this.type = type;
 		return this;
 	}
 
-	public PersonIdentifierBuilder setRaw(String raw) {
+	public PersonIdentifierBuilder setRaw(byte[] raw) {
 		this.raw = raw;
 		return this;
 	}
@@ -34,9 +34,9 @@ public class PersonIdentifierBuilder {
 		private static final long serialVersionUID = 4211652569433895239L;
 
 		private final PersonIdentifierType type;
-		private final String raw;
+		private final byte[] raw;
 
-		private PersonIdentifier(PersonIdentifierType type, String raw) {
+		private PersonIdentifier(PersonIdentifierType type, byte[] raw) {
 			super();
 			this.type = type;
 			this.raw = raw;
@@ -48,7 +48,7 @@ public class PersonIdentifierBuilder {
 		}
 
 		@Override
-		public String getRaw() {
+		public byte[] getRaw() {
 			return raw;
 		}
 

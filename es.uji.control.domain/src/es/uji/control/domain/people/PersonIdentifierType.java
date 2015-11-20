@@ -7,6 +7,23 @@
  *******************************************************************************/
 package es.uji.control.domain.people;
 
+import java.nio.ByteBuffer;
+
 public enum PersonIdentifierType {
-	GENERAL_LONG_ID
+	
+	GENERAL_LONG_ID;
+	
+	public static byte[] generalLongIdToBytes(long x) {
+		ByteBuffer buffer = ByteBuffer.allocate(Long.BYTES);
+		buffer.putLong(0, x);
+		return buffer.array();
+	}
+
+	public static long bytesToGeneralLongId(byte[] bytes) {
+		ByteBuffer buffer = ByteBuffer.allocate(Long.BYTES);
+		buffer.put(bytes, 0, bytes.length);
+		buffer.flip();
+		return buffer.getLong();
+	}
+
 }
