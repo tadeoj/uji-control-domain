@@ -63,12 +63,13 @@ public class PersonTest {
 		
 		PersonIdentifierBuilder idBuilder = new PersonIdentifierBuilder();
 		idBuilder.setType(PersonIdentifierType.GENERAL_LONG_ID);
-		idBuilder.setRaw("12345678");
+		byte[] rawId = ByteBuffer.allocate(4).putInt(12345678).array();
+		idBuilder.setRaw(rawId);
 		
 		AccreditationBuilder accreditationBuilder = new AccreditationBuilder();
 		accreditationBuilder.setType(AccreditationType.MIFARE_SERIAL_NUMBER);
-		byte[] raw = ByteBuffer.allocate(4).putInt(20202020).array();
-		accreditationBuilder.setRaw(raw);
+		byte[] rawAccreditation = ByteBuffer.allocate(4).putInt(20202020).array();
+		accreditationBuilder.setRaw(rawAccreditation);
 		
 		AccreditationInfoBuilder accreditationInfoBuilder = new AccreditationInfoBuilder();
 		accreditationInfoBuilder.setAccreditation(accreditationBuilder.build());		
@@ -85,7 +86,7 @@ public class PersonTest {
 		builder.setFirstLastName("Julián");
 		builder.setSecondLastName("Segarra");
 		builder.setIdentification("11111111L");
-		builder.addAccreditation(accreditationInfoBuilder.build());
+		builder.setAccreditationsInfo(accreditationInfoBuilder.build());
 		builder.addLinkage(linkageBuilder.build());
 		return builder.build();
 	}
