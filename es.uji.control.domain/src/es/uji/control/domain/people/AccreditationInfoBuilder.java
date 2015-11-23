@@ -7,25 +7,25 @@
  *******************************************************************************/
 package es.uji.control.domain.people;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 public class AccreditationInfoBuilder {
 
 	private IAccreditation accreditation;
-	private Date emisionDate;
-	private Date cancelationDate;
+	private LocalDateTime  emisionDate;
+	private LocalDateTime cancelationDate;
 	
 	public AccreditationInfoBuilder setAccreditation (IAccreditation accreditation) {
 		this.accreditation = accreditation;
 		return this;
 	}
 	
-	public AccreditationInfoBuilder setEmisionDate (Date emisionDate) {
+	public AccreditationInfoBuilder setEmisionDate (LocalDateTime emisionDate) {
 		this.emisionDate = emisionDate;
 		return this;
 	}
 	
-	public AccreditationInfoBuilder setCancelationDate(Date cancelationDate) {
+	public AccreditationInfoBuilder setCancelationDate(LocalDateTime cancelationDate) {
 		this.cancelationDate = cancelationDate;
 		return this;
 	}
@@ -40,13 +40,11 @@ public class AccreditationInfoBuilder {
 	
 	static private class AccreditationInfo implements IAccreditationInfo {
 
-		private static final long serialVersionUID = 1657010167191488308L;
-
 		private final IAccreditation accreditation;
-		private final Date emisionDate;
-		private final Date cancelationDate;
+		private final LocalDateTime emisionDate;
+		private final LocalDateTime cancelationDate;
 		
-		private AccreditationInfo(IAccreditation accreditation, Date emisionDate, Date cancelationDate) {
+		private AccreditationInfo(IAccreditation accreditation, LocalDateTime emisionDate, LocalDateTime cancelationDate) {
 			super();
 			this.accreditation = accreditation;
 			this.emisionDate = emisionDate;
@@ -54,12 +52,12 @@ public class AccreditationInfoBuilder {
 		}
 		
 		@Override
-		public Date getEmisionDate() {
+		public LocalDateTime getEmisionDate() {
 			return emisionDate;
 		}
 
 		@Override
-		public Date getCancelationDate() {
+		public LocalDateTime getCancelationDate() {
 			return cancelationDate;
 		}
 

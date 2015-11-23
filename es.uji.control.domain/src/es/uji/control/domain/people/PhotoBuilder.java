@@ -7,13 +7,13 @@
  *******************************************************************************/
 package es.uji.control.domain.people;
 
-import java.sql.Date;
+import java.time.LocalDateTime;
 import java.util.Arrays;
 
 public class PhotoBuilder {
 
 	private IPersonIdentifier personId;
-	private Date date;
+	private LocalDateTime date;
 	private byte[] image;
 	
 	public PhotoBuilder setPersonId(IPersonIdentifier personId) {
@@ -21,7 +21,7 @@ public class PhotoBuilder {
 		return this;
 	}
 	
-	public PhotoBuilder setDate(Date date) {
+	public PhotoBuilder setDate(LocalDateTime date) {
 		this.date = date;
 		return this;
 	}
@@ -43,10 +43,10 @@ public class PhotoBuilder {
 		private static final long serialVersionUID = 1520108919911121865L;
 
 		private final IPersonIdentifier personId;
-		private final Date date;
+		private final LocalDateTime date;
 		private final byte[] image;
 		
-		private Photo(IPersonIdentifier personId, Date date, byte[] image) {
+		private Photo(IPersonIdentifier personId, LocalDateTime date, byte[] image) {
 			super();
 			this.personId = personId;
 			this.date = date;
@@ -59,7 +59,7 @@ public class PhotoBuilder {
 		}
 
 		@Override
-		public java.util.Date getDate() {
+		public LocalDateTime getDate() {
 			return date;
 		}
 

@@ -1,9 +1,9 @@
 package es.uji.control.domain.people;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 public interface IAccreditationInfo {
-	public Date getEmisionDate();
-	public Date getCancelationDate();
+	public LocalDateTime getEmisionDate();
+	public LocalDateTime getCancelationDate();
 	public IAccreditation getAccreditation();
 }
