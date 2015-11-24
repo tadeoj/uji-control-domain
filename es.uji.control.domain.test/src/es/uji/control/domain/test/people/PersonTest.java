@@ -10,7 +10,9 @@ package es.uji.control.domain.test.people;
 import static org.junit.Assert.assertEquals;
 
 import java.nio.ByteBuffer;
-import java.util.Date;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -19,6 +21,8 @@ import org.junit.runners.JUnit4;
 import es.uji.control.domain.people.AccreditationBuilder;
 import es.uji.control.domain.people.AccreditationInfoBuilder;
 import es.uji.control.domain.people.AccreditationType;
+import es.uji.control.domain.people.IAccreditationInfo;
+import es.uji.control.domain.people.ILinkage;
 import es.uji.control.domain.people.IPerson;
 import es.uji.control.domain.people.LinkageBuilder;
 import es.uji.control.domain.people.PersonBuilder;
@@ -28,8 +32,8 @@ import es.uji.control.domain.people.PersonIdentifierType;
 @RunWith(JUnit4.class)
 public class PersonTest {
 
-	private Date emisionDate;
-	private Date cancelationDate;
+	private LocalDateTime emisionDate;
+	private LocalDateTime cancelationDate;
 	
 	@Test
 	public void testCreation() {
@@ -58,8 +62,11 @@ public class PersonTest {
 	
 	public IPerson creation() {
 		
-		emisionDate = new Date();
-		cancelationDate = new Date();
+		emisionDate = LocalDateTime.now();
+		cancelationDate = LocalDateTime.now();
+		
+		List<IAccreditationInfo> accreditationsInfo = new ArrayList<>();
+		List<ILinkage> linkagesInfo = new ArrayList<>();
 		
 		PersonIdentifierBuilder idBuilder = new PersonIdentifierBuilder();
 		idBuilder.setType(PersonIdentifierType.GENERAL_LONG_ID);
@@ -86,8 +93,10 @@ public class PersonTest {
 		builder.setFirstLastName("Julián");
 		builder.setSecondLastName("Segarra");
 		builder.setIdentification("11111111L");
-		builder.setAccreditationsInfo(accreditationInfoBuilder.build());
-		builder.addLinkage(linkageBuilder.build());
+		accreditationsInfo.add(accreditationInfoBuilder.build());
+		builder.setAccreditationsInfo(accreditationsInfo);
+		linkagesInfo.add(linkageBuilder.build());
+		builder.setLinkages(linkagesInfo);
 		return builder.build();
 	}
 
