@@ -11,7 +11,7 @@ import es.uji.control.domain.provider.subsystem.authorizations.IAuthorizationsSe
 import es.uji.control.domain.provider.subsystem.people.IPersonService;
 
 public interface IControlConnection {
-	abstract IPersonService getPersonService() throws ControlNotImplementedException;
-	abstract IAuthorizationsService getAuthorizationsService() throws ControlNotImplementedException;
+	abstract IPersonService getPersonService() throws ControlConnectionException;
+	abstract IAuthorizationsService getAuthorizationsService() throws ControlConnectionException;
 	abstract void close();
 }
