@@ -32,8 +32,6 @@ public class AccreditationInfoBuilder {
 	
 	public AccreditationInfo build() {
 		if (accreditation == null) throw new IllegalStateException("accreditation isn't defined");
-		if (emisionDate == null) throw new IllegalStateException("emisionDate isn't defined");
-		if (cancelationDate == null) throw new IllegalStateException("cancelationDate isn't defined");
 		
 		return new AccreditationInfo(accreditation, emisionDate, cancelationDate);
 	}
