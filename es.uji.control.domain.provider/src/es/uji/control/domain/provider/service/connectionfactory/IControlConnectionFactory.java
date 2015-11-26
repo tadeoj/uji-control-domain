@@ -7,8 +7,11 @@
  *******************************************************************************/
 package es.uji.control.domain.provider.service.connectionfactory;
 
+import java.util.UUID;
+
 import es.uji.control.domain.provider.service.connectionfactory.IControlConnection;
 
 public interface IControlConnectionFactory {
+	abstract UUID getSignature();
 	abstract IControlConnection createConnection() throws ControlConnectionException;
 }
