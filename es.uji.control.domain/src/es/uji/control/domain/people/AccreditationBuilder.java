@@ -13,6 +13,7 @@ public class AccreditationBuilder {
 
 	private AccreditationType type;
 	private byte[] raw;
+	private long id;
 	
 	public AccreditationBuilder setType(AccreditationType type) {
 		this.type = type;
@@ -24,11 +25,16 @@ public class AccreditationBuilder {
 		return this;
 	}
 	
+	public AccreditationBuilder setId(long id) {
+		this.id = id;
+		return this;
+	}
+	
 	public Accreditation build() {
 		if (type == null) throw new IllegalStateException("type isn't defined");
 		if (raw == null) throw new IllegalStateException("raw isn't defined");
 		
-		return new Accreditation(type, raw);
+		return new Accreditation(type, raw, id);
 	}
 	
 	static private class Accreditation implements IAccreditation {
@@ -37,11 +43,13 @@ public class AccreditationBuilder {
 
 		private final AccreditationType type;
 		private final byte[] raw;
+		private final long id;
 		
-		private Accreditation(AccreditationType type, byte[] raw) {
+		private Accreditation(AccreditationType type, byte[] raw, long id) {
 			super();
 			this.type = type;
 			this.raw = raw;
+			this.id = id;
 		}
 		
 		@Override
@@ -53,11 +61,17 @@ public class AccreditationBuilder {
 		public byte[] getRaw() {
 			return raw;
 		}
+		
+		@Override
+		public long getId() {
+			return id;
+		}
 
 		@Override
 		public int hashCode() {
 			final int prime = 31;
 			int result = 1;
+			result = prime * result + (int) (id ^ (id >>> 32));
 			result = prime * result + Arrays.hashCode(raw);
 			result = prime * result + ((type == null) ? 0 : type.hashCode());
 			return result;
@@ -72,13 +86,15 @@ public class AccreditationBuilder {
 			if (getClass() != obj.getClass())
 				return false;
 			Accreditation other = (Accreditation) obj;
+			if (id != other.id)
+				return false;
 			if (!Arrays.equals(raw, other.raw))
 				return false;
 			if (type != other.type)
 				return false;
 			return true;
 		}
-		
+
 	}
 	
 }

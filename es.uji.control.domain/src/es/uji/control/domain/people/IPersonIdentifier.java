@@ -12,6 +12,7 @@ import java.io.Serializable;
 public interface IPersonIdentifier extends Serializable {
 	public PersonIdentifierType getType();
 	public byte[] getRaw();
+	public long getId();
 	public abstract int hashCode();
 	public abstract boolean equals(Object obj);
 }

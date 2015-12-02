@@ -7,11 +7,13 @@
  *******************************************************************************/
 package es.uji.control.domain.people;
 
+import java.util.Arrays;
 
 public class PersonIdentifierBuilder {
 
 	private PersonIdentifierType type;
 	private byte[] raw;
+	private long id;
 
 	public PersonIdentifierBuilder setType(PersonIdentifierType type) {
 		this.type = type;
@@ -23,10 +25,15 @@ public class PersonIdentifierBuilder {
 		return this;
 	}
 	
+	public PersonIdentifierBuilder setid(long id) {
+		this.id = id;
+		return this;
+	}
+	
 	public PersonIdentifier build() {
 		if (type == null) throw new IllegalStateException("personIdentifierType isn´t defined");
 		if (raw == null) throw new IllegalStateException("raw isn´t defined");
-		return new PersonIdentifier(type, raw);
+		return new PersonIdentifier(type, raw, id);
 	}
 
 	static private class PersonIdentifier implements IPersonIdentifier {
@@ -35,11 +42,13 @@ public class PersonIdentifierBuilder {
 
 		private final PersonIdentifierType type;
 		private final byte[] raw;
-
-		private PersonIdentifier(PersonIdentifierType type, byte[] raw) {
+		private final long id;
+		
+		private PersonIdentifier(PersonIdentifierType type, byte[] raw, long id) {
 			super();
 			this.type = type;
 			this.raw = raw;
+			this.id = id;
 		}
 
 		@Override
@@ -51,12 +60,18 @@ public class PersonIdentifierBuilder {
 		public byte[] getRaw() {
 			return raw;
 		}
+		
+		@Override
+		public long getId() {
+			return id;
+		}
 
 		@Override
 		public int hashCode() {
 			final int prime = 31;
 			int result = 1;
-			result = prime * result + ((raw == null) ? 0 : raw.hashCode());
+			result = prime * result + (int) (id ^ (id >>> 32));
+			result = prime * result + Arrays.hashCode(raw);
 			result = prime * result + ((type == null) ? 0 : type.hashCode());
 			return result;
 		}
@@ -70,10 +85,9 @@ public class PersonIdentifierBuilder {
 			if (getClass() != obj.getClass())
 				return false;
 			PersonIdentifier other = (PersonIdentifier) obj;
-			if (raw == null) {
-				if (other.raw != null)
-					return false;
-			} else if (!raw.equals(other.raw))
+			if (id != other.id)
+				return false;
+			if (!Arrays.equals(raw, other.raw))
 				return false;
 			if (type != other.type)
 				return false;

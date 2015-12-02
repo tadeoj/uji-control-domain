@@ -12,4 +12,5 @@ import java.io.Serializable;
 public interface IAccreditation extends Serializable {
 	public AccreditationType getType();
 	public byte[] getRaw();
+	public long getId();
 }
