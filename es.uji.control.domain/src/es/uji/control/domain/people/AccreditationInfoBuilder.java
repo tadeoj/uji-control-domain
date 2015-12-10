@@ -14,6 +14,7 @@ public class AccreditationInfoBuilder {
 	private IAccreditation accreditation;
 	private LocalDateTime  emisionDate;
 	private LocalDateTime cancelationDate;
+	private String description;
 	
 	public AccreditationInfoBuilder setAccreditation (IAccreditation accreditation) {
 		this.accreditation = accreditation;
@@ -30,10 +31,15 @@ public class AccreditationInfoBuilder {
 		return this;
 	}
 	
+	public AccreditationInfoBuilder setDescription(String description) {
+		this.description = description;
+		return this;
+	}
+	
 	public AccreditationInfo build() {
 		if (accreditation == null) throw new IllegalStateException("accreditation isn't defined");
 		
-		return new AccreditationInfo(accreditation, emisionDate, cancelationDate);
+		return new AccreditationInfo(accreditation, emisionDate, cancelationDate, description);
 	}
 	
 	static private class AccreditationInfo implements IAccreditationInfo {
@@ -41,12 +47,14 @@ public class AccreditationInfoBuilder {
 		private final IAccreditation accreditation;
 		private final LocalDateTime emisionDate;
 		private final LocalDateTime cancelationDate;
+		private final String description;
 		
-		private AccreditationInfo(IAccreditation accreditation, LocalDateTime emisionDate, LocalDateTime cancelationDate) {
+		private AccreditationInfo(IAccreditation accreditation, LocalDateTime emisionDate, LocalDateTime cancelationDate, String description) {
 			super();
 			this.accreditation = accreditation;
 			this.emisionDate = emisionDate;
 			this.cancelationDate = cancelationDate;
+			this.description = description;
 		}
 		
 		@Override
@@ -65,11 +73,17 @@ public class AccreditationInfoBuilder {
 		}
 
 		@Override
+		public String getDescription() {
+			return description;
+		}
+
+		@Override
 		public int hashCode() {
 			final int prime = 31;
 			int result = 1;
 			result = prime * result + ((accreditation == null) ? 0 : accreditation.hashCode());
 			result = prime * result + ((cancelationDate == null) ? 0 : cancelationDate.hashCode());
+			result = prime * result + ((description == null) ? 0 : description.hashCode());
 			result = prime * result + ((emisionDate == null) ? 0 : emisionDate.hashCode());
 			return result;
 		}
@@ -92,6 +106,11 @@ public class AccreditationInfoBuilder {
 				if (other.cancelationDate != null)
 					return false;
 			} else if (!cancelationDate.equals(other.cancelationDate))
+				return false;
+			if (description == null) {
+				if (other.description != null)
+					return false;
+			} else if (!description.equals(other.description))
 				return false;
 			if (emisionDate == null) {
 				if (other.emisionDate != null)
