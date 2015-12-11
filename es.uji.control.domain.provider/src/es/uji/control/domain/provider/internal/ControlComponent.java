@@ -11,6 +11,8 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceRegistration;
@@ -21,6 +23,8 @@ import org.osgi.service.component.annotations.Deactivate;
 import org.osgi.service.component.annotations.Reference;
 import org.osgi.service.component.annotations.ReferenceCardinality;
 import org.osgi.service.component.annotations.ReferencePolicy;
+import org.osgi.service.prefs.BackingStoreException;
+import org.osgi.service.prefs.Preferences;
 import org.osgi.service.prefs.PreferencesService;
 
 import es.uji.control.domain.provider.service.connectionfactory.IControlConnectionFactory;
@@ -32,9 +36,10 @@ import es.uji.control.domain.provider.spi.IControlConnectionFactorySPI;
 public class ControlComponent implements IControlConnectionFactorySelector {
 	
 	final static String CURRENT_FACTORY_KEY = "current";
+	private final static Logger LOGGER = Logger.getLogger(ControlComponent.class.getName()); 
 	
 	private BundleContext bundlecontext;
-	private PreferencesService preferencesService;
+	private Preferences preferences;
 	private Map<ConnectionFactoryKey, ConnectionFactoryBucket> factories = new HashMap<>();
 	private ConnectionFactoryRegistration registration;
 	
@@ -62,7 +67,7 @@ public class ControlComponent implements IControlConnectionFactorySelector {
 	public void bindPreferences(PreferencesService preferencesService) {
 		synchronized (this) {
 			// Se anota el servicio de registro
-			this.preferencesService = preferencesService;
+			this.preferences = preferencesService.getSystemPreferences();
 			// Se regulariza el registro del servicio
 			updateRegistration();
 		}
@@ -71,7 +76,7 @@ public class ControlComponent implements IControlConnectionFactorySelector {
 	public void unbindPreferences(PreferencesService preferencesService) {
 		synchronized (this) {
 			// Se resetea el servicio de registro
-			this.preferencesService = null;
+			this.preferences = null;
 			// Se regulariza el registro del servicio
 			updateRegistration();
 		}
@@ -95,14 +100,19 @@ public class ControlComponent implements IControlConnectionFactorySelector {
 	@Override
 	public ConnectionFactoryKey getCurrentFactoryKey() {
 		synchronized (this) {
-			return new ConnectionFactoryKey(preferencesService.getSystemPreferences().get(CURRENT_FACTORY_KEY, null));
+			return new ConnectionFactoryKey(preferences.get(CURRENT_FACTORY_KEY, null));
 		}
 	}
 
 	@Override
 	public void setCurrentFactoryKey(ConnectionFactoryKey key) {
 		synchronized (this) {
-			preferencesService.getSystemPreferences().put(CURRENT_FACTORY_KEY, key.toString());
+			preferences.put(CURRENT_FACTORY_KEY, key.toString());
+			try {
+				preferences.flush();
+			} catch (BackingStoreException e) {
+				LOGGER.log(Level.INFO, "No se han podido persistir las preferencias", e);
+			}
 		}
 	}
 
