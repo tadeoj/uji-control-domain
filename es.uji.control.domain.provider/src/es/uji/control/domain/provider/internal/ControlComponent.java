@@ -100,7 +100,11 @@ public class ControlComponent implements IControlConnectionFactorySelector {
 	@Override
 	public ConnectionFactoryKey getCurrentFactoryKey() {
 		synchronized (this) {
-			return new ConnectionFactoryKey(preferences.get(CURRENT_FACTORY_KEY, null));
+			if (preferences != null) {
+				return new ConnectionFactoryKey(preferences.get(CURRENT_FACTORY_KEY, null));
+			} else {
+				return null;
+			}
 		}
 	}
 
@@ -163,8 +167,17 @@ public class ControlComponent implements IControlConnectionFactorySelector {
 			desregisterConnectionFactory();
 		}
 		
+		boolean mustRegister;
+		
+		ConnectionFactoryKey currentFactoryKey = getCurrentFactoryKey();
+		
 		// Se verifica si hay que registrar los registros
-		boolean mustRegister = registration == null && (bundlecontext != null && factories.keySet().contains(getCurrentFactoryKey()));
+		if (registration == null && (bundlecontext != null && factories.keySet().contains(currentFactoryKey))) {
+			mustRegister = true;
+		} else {
+			mustRegister = false;
+		}
+				
 		if (mustRegister) {
 			registerConnectionFactory(factories.get(getCurrentFactoryKey()).getConnectionFactorySPI(), getCurrentFactoryKey());
 		}
