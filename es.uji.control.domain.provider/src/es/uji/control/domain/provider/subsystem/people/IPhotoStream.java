@@ -5,9 +5,11 @@
  * La llicència completa es pot descarregar de 
  * https://joinup.ec.europa.eu/community/eupl/og_page/european-union-public-licence-eupl-v11
  *******************************************************************************/
-package es.uji.control.domain.people;
+package es.uji.control.domain.provider.subsystem.people;
 
 import java.util.List;
+
+import es.uji.control.domain.people.IPhoto;
 
 public interface IPhotoStream {
 	 void onNext(List<IPhoto> l);

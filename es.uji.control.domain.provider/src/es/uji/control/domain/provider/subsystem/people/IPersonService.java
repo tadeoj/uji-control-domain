@@ -9,7 +9,6 @@ package es.uji.control.domain.provider.subsystem.people;
 
 import es.uji.control.domain.people.IAccreditation;
 import es.uji.control.domain.people.IPersonIdentifier;
-import es.uji.control.domain.people.IPhotoStream;
 import es.uji.control.domain.provider.service.connectionfactory.ControlConnectionException;
 
 public interface IPersonService {
