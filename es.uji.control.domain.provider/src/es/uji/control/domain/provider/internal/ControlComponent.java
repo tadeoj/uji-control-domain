@@ -197,7 +197,7 @@ public class ControlComponent implements IControlConnectionFactorySelector {
 	
 	private void desregisterConnectionFactory() {
 		if (registration != null) {
-			registration.getRegistration().unregister();;
+			registration.getRegistration().unregister();
 			registration = null;
 		}
 	}
