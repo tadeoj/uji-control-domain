@@ -114,6 +114,7 @@ public class ControlComponent implements IControlConnectionFactorySelector {
 			preferences.put(CURRENT_FACTORY_KEY, key.toString());
 			try {
 				preferences.flush();
+				preferences.sync();
 			} catch (BackingStoreException e) {
 				LOGGER.log(Level.INFO, "No se han podido persistir las preferencias", e);
 			}
